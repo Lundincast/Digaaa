@@ -1,18 +1,18 @@
 from django.db import models
 from django.utils import timezone
 
+from artists.models import Artist
 from users.models import User
 from common.models import ARTIST_ADD_CHOICES, LANGUAGE_CODES_CHOICES, TRACK_TYPE_CHOICES, TRACK_PREORDER_TYPE_CHOICES, GENRE_CHOICES, COUNTRY_CODES_CHOICES
 
 
 class Album(models.Model):
     key = models.PositiveIntegerField(editable=False, blank=True)
-    label_name = models.CharField(blank = False, max_length=200)
-    album_ean_upc = models.BigIntegerField(blank=False)
-    album_artist = models.CharField(blank=False, max_length=200)
+    artist = models.ForeignKey(Artist, related_name='albums', on_delete=models.SET_NULL, blank=True, null=True)
     album_artist_add = models.CharField(blank=False, choices=ARTIST_ADD_CHOICES, max_length=50)
     album_title = models.CharField(blank=False, max_length=200)
     album_version = models.CharField(blank=True, max_length=200)
+    label_name = models.CharField(blank = False, max_length=200)
     album_artist_url = models.CharField(blank=True, max_length=200)
     album_label_order_number = models.CharField(blank=True, null=False, max_length=200)
     album_media_type = models.CharField(blank=True, max_length=50)
@@ -37,6 +37,7 @@ class Album(models.Model):
     album_production_info = models.CharField(blank=False, max_length=200)
     booklet_included = models.BooleanField(default=False)
     liner_notes = models.CharField(blank=True, null=True, max_length=200)
+    album_ean_upc = models.BigIntegerField(blank=False)
     submitter = models.ForeignKey(User, on_delete= models.SET_NULL, null=True, blank=False)
     date_created = models.DateTimeField(editable=False)
     date_modified = models.DateTimeField(blank=True)
@@ -55,14 +56,13 @@ class Album(models.Model):
         from django.urls import reverse
         return reverse('album_detail', args=[str(self.id)])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.album_title
 
 
 class Track(models.Model):
     key = models.PositiveIntegerField(editable=False, blank=True)
-    ISRC = models.CharField(blank=True, max_length=200)
-    track_artist = models.CharField(blank=False, max_length=200)
+    artist = models.ForeignKey(Artist, related_name='tracks', on_delete=models.SET_NULL, blank=True, null=True)
     track_artist_add = models.CharField(blank=False, choices=ARTIST_ADD_CHOICES, max_length=200)
     track_title = models.CharField(blank=False, max_length=200)
     track_version = models.CharField(blank=True, null=True, max_length=100)
@@ -91,6 +91,7 @@ class Track(models.Model):
     track_arranger = models.CharField(blank=True, max_length=200)
     track_producer = models.CharField(blank=True, max_length=200)
     track_publisher = models.CharField(blank=False, max_length=200)
+    ISRC = models.CharField(blank=True, max_length=200)
     musical_work_rights = models.CharField(blank=False, max_length=200)
     music_percentage = models.SmallIntegerField(default=100)
     album = models.ForeignKey(Album, related_name='tracks', on_delete=models.SET_NULL, blank=True, null=True)
@@ -98,7 +99,7 @@ class Track(models.Model):
     date_created = models.DateTimeField(editable=False, blank=True)
     date_modified = models.DateTimeField(blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.track_title
 
     def save(self, *args, **kwargs):
