@@ -307,7 +307,7 @@ LANGUAGE_CODES_CHOICES = (
     ('sd', 'Sindhi'),
     ('si', 'Sinhala'),
     ('sms', 'Skolt Sami'),
-    ('den', 'Slave (Athapascan)'),
+    ('den', 'Subordinate (Athapascan)'),
     ('sk', 'Slovak'),
     ('sl', 'Slovenian'),
     ('so', 'Somali'),
@@ -428,7 +428,7 @@ ARTIST_ADD_CHOICES = (
             ('125 Male Choir', 'Male Choir'),
             ('126 Vocal Ensemble', 'Vocal Ensemble'),
             ('127 Mixed Choir', 'Mixed Choir'),
-            ('128 Choirmaster', 'Choirmaster'),
+            ('128 Choirmain', 'Choirmain'),
             ('129 Choir / Others', 'Choir / Others'),
         )
     ),
